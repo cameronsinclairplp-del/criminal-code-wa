@@ -1,37 +1,52 @@
-# Criminal Code · WA — one-tap reference app
+# WA Legislation — one-tap reference app (v2)
 
-The whole *Criminal Code* (WA), compilation **01 May 2026** (PCO 19-aq0-00), as a single
-self-contained web app: 472 Code sections plus the front provisions and Schedule 1,
-verbatim from the exam-copy PDF. Search by section number or words, browse by Part and
-Chapter, bookmarks, dark mode, offline.
+Live at: **https://cameronsinclairplp-del.github.io/criminal-code-wa/**
 
-## Put it on your iPhone/iPad (GitHub Pages)
+23 Acts · 5,191 provisions · verbatim text · fully offline once installed.
+One adaptive app: iPhone (bottom dock), iPad (split-view sidebar), Mac (keyboard-first, ⌘K).
 
-1. Create a new GitHub repository (e.g. `criminal-code-wa`). Public or private — Pages works with both on your plan.
-2. Upload **everything in this folder** (`index.html`, `manifest.webmanifest`, `sw.js`, `icons/`) to the repo root.
-3. Repo **Settings → Pages → Source: Deploy from a branch → main / (root) → Save**.
-4. Wait ~1 minute, then open `https://<your-username>.github.io/criminal-code-wa/` in **Safari**.
-5. **Share → Add to Home Screen → Add.**
+## What's in this folder (everything the website needs)
 
-It opens full-screen with its own icon, loads instantly, and keeps working offline
-(the service worker caches everything after the first visit).
+| File | What it is |
+|---|---|
+| `index.html` | The app shell (UI + topic hub + act manifest) |
+| `data/*.json` | One file per Act — verbatim sections, pre-rendered |
+| `sw.js` | Service worker — precaches everything for offline (auto-versioned) |
+| `manifest.webmanifest` | PWA manifest ("WA Legislation") |
+| `icons/` | App icons |
 
-## Updating the data
+## Deploying an update (2 minutes)
 
-Re-run the build in `../build/` after replacing the source markdown:
+1. Open https://github.com/cameronsinclairplp-del/criminal-code-wa
+2. **Add file → Upload files** → drag in `index.html`, `sw.js`, `manifest.webmanifest` → **Commit changes**
+3. Open the `data` folder in the repo (or type `data/` in the upload path to create it) → upload all 23 `.json` files from this folder's `data/` → **Commit changes**
+4. Done. GitHub Pages republishes in ~1 minute. Installed copies pick up the new version on next launch with internet (the service worker re-caches automatically).
+
+Icons only need uploading once (already there from v1).
+
+## Installing on a device
+
+- **iPhone / iPad**: open the link in Safari → Share → **Add to Home Screen** → Add.
+  (Re-add it to refresh the icon label to "Legislation".)
+- **Mac**: open in Safari → File → **Add to Dock**. Or just bookmark it — ⌘K searches.
+
+## Rebuilding from source (when a new compilation is published)
+
+From `../build/`:
 
 ```
-python3 parse_code.py   # md → data.json (validated, verbatim fidelity check)
-python3 build_app.py    # data + css + js → index.html
+python3 parse_v2.py        # 17 sectioned acts  → out/*.json   (expect "fails 0" everywhere)
+python3 parse_archive.py   # 6 page-archive acts → out/*.json  (expect "render-fallbacks 0")
+python3 build_v2.py        # assembles this folder; bumps the SW version automatically
 ```
 
-Then replace `index.html` in the repo. Bump `VERSION` in `sw.js` whenever you update,
-so installed copies fetch the new build.
+Source markdown lives in `Legislation Master/Legislation - Markdown`. Per-act parse logs
+are written to `build/out/report-*.txt`. The build fails loudly if a topic link stops
+resolving. Verbatim rule: any section that can't be rendered with 100% fidelity ships as
+plain verbatim text instead — never edited, never paraphrased.
 
 ## Notes
 
-- Tip: in the app, search "371" jumps straight to the section; "/" focuses search on iPad with a keyboard.
-- Each section shows its exam-copy PDF page, so you can pivot to the paper copy in the exam.
-- Haptics: real on Android; on iOS, Apple removed the programmatic haptic workaround in 26.5 —
-  the settings switch still gives a genuine tick when tapped directly.
+- Search understands act prefixes: `cia 128`, `mda 11`, `ea 106A`. Enter opens the top hit.
+- Every section shows its source PDF page, so you can pivot to the paper exam copy.
 - Study aid only — verify against the official compilation before quoting in evidence/court.
