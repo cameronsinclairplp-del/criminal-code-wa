@@ -1,12 +1,12 @@
 {
   "name": "WA Legislation",
   "short_name": "Legislation",
-  "description": "WA criminal legislation \u2014 fast offline reference. 23 Acts, verbatim.",
+  "description": "WA criminal law, offline \u2014 23 Acts, 10 doctrine manuals, 18 reference categories. Verbatim.",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f3f4f7",
-  "theme_color": "#f3f4f7",
+  "background_color": "#F2F2F7",
+  "theme_color": "#F2F2F7",
   "icons": [
     {
       "src": "icons/icon-192.png",
