@@ -642,7 +642,7 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
 
 /* ============ v6: scaffolds, doctrine, ticker, selection pill ============ */
 /* recall scaffold card (System B) */
-.scaff-card{margin:0 0 16px;background:var(--surface);border:1px solid color-mix(in srgb,var(--hue,#888) 30%,transparent);
+.scaff-card{margin:18px 0 16px;background:var(--surface);border:1px solid color-mix(in srgb,var(--hue,#888) 30%,transparent);
   border-radius:var(--r-md);box-shadow:var(--shadow);overflow:hidden}
 .scaff-head{display:flex;align-items:center;gap:10px;width:100%;padding:12px 15px;font-weight:650;font-size:.92em}
 .scaff-head svg{width:18px;height:18px;color:color-mix(in srgb,var(--hue,#888) 70%,var(--text) 30%);flex:none}
@@ -651,7 +651,13 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
   background:color-mix(in srgb,var(--hue,#888) 9%,transparent);border:1px solid color-mix(in srgb,var(--hue,#888) 26%,transparent);
   padding:3px 9px;border-radius:999px;white-space:nowrap}
 .scaff-card.open .part-chev{transform:rotate(90deg)}
-.scaff-body{padding:2px 15px 13px}
+.scaff-card .part-chev{transition:transform .25s var(--ease)}
+.sf-body{display:grid;grid-template-rows:0fr;transition:grid-template-rows .3s var(--ease)}
+.scaff-card.open .sf-body{grid-template-rows:1fr}
+.sf-body>div{overflow:hidden}
+.scaff-card{border-top:3px solid color-mix(in srgb,var(--hue,#888) 55%,transparent)}
+.scaff-body{padding:2px 15px 13px;transition:padding .3s var(--ease)}
+.scaff-card:not(.open) .scaff-body{padding-top:0;padding-bottom:0}
 .sf-ent + .sf-ent{border-top:1px solid var(--hairline-2);margin-top:11px;padding-top:11px}
 .sf-row{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap}
 .sf-ref{font-size:.72em;font-weight:700;letter-spacing:.04em;color:var(--text-3);font-variant-numeric:tabular-nums;flex:none}
@@ -688,6 +694,45 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
 .sel-pill:active{transform:scale(.96)}
 
 .statute .dl.hd { font-weight: 680; letter-spacing: .01em; margin-top: 14px; }
+
+
+/* ============ v8: wide-screen rails ============ */
+@media (min-width:1240px){
+  /* recall scaffold as sticky side rail beside the statute */
+  .reader{display:grid;grid-template-columns:minmax(0,1fr) 304px;column-gap:28px}
+  .reader>*{grid-column:1}
+  .reader>.scaff-card{grid-column:2;grid-row:1/span 99;align-self:start;position:sticky;top:74px;
+    margin:0;max-height:calc(100vh - 100px);overflow:auto;scrollbar-width:thin}
+  .reader>.scaff-card .part-chev{display:none}
+  .reader>.scaff-card .sf-body{grid-template-rows:1fr}
+  .reader>.scaff-card .scaff-head{pointer-events:none}
+  /* browse: scrollspy rail replaces the tickers */
+  #view-act{display:grid;grid-template-columns:minmax(0,1fr) 286px;column-gap:28px;align-items:start}
+  #view-act>*{grid-column:1}
+  #view-act>.spy{grid-column:2;grid-row:1/span 199;align-self:start;position:sticky;top:74px;
+    max-height:calc(100vh - 100px);overflow:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:2px;
+    padding:10px 4px 14px}
+  #view-act .ticker{display:none}
+}
+@media (max-width:1239.9px){ .spy{display:none} }
+
+/* scrollspy rail */
+.spy-head{font-size:.72em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);
+  margin:0 0 8px;padding:0 10px}
+.spy-g{display:flex;gap:10px;align-items:stretch;text-align:left;padding:7px 10px;border-radius:12px;
+  transition:background .15s;width:100%}
+.spy-g .spy-bar{flex:none;width:3px;border-radius:99px;background:color-mix(in srgb,var(--hue,#888) 30%,transparent);
+  transition:background .2s}
+.spy-g .spy-main{min-width:0;display:flex;flex-direction:column;gap:2px}
+.spy-g .spy-lab{font-size:.8em;font-weight:650;color:var(--text-2);line-height:1.3;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.spy-g .spy-names{font-size:.7em;line-height:1.45;color:var(--text-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.spy-g.on{background:color-mix(in srgb,var(--hue,#888) 8%,transparent)}
+.spy-g.on .spy-bar{background:color-mix(in srgb,var(--hue,#888) 75%,var(--text) 10%)}
+.spy-g.on .spy-lab{color:var(--text);font-weight:700}
+@media(hover:hover){ .spy-g:hover{background:color-mix(in srgb,var(--hue,#888) 6%,transparent)} }
+[data-theme="dark"] .spy-g.on{background:color-mix(in srgb,var(--hue,#888) 16%,transparent)}
 
 </style>
 </head>
@@ -1218,6 +1263,42 @@ function renderAct(actId, q){
     v.appendChild(el("p", { class:"sec-foot", style:"justify-content:center;margin-top:26px" },
       `${esc(m.name)}${m.pco ? " · " + esc(m.pco) : ""}`));
 
+    // ---- scrollspy rail (wide screens): what's where as you scroll ----
+    if (act.tree.length > 1) {
+      const spy = el("nav", { class:"spy", "aria-label":"Contents in view" });
+      spy.appendChild(el("p", { class:"spy-head" }, "On this page"));
+      const rows = new Map();
+      act.tree.forEach(g => {
+        const hue = groupHue(act, g.id);
+        const names = [];
+        g.items.forEach(it => {
+          if (names.length >= 4) return;
+          if (it.k === "sec") { const s2 = act.byId.get(it.id); if (s2 && !s2.dt) names.push(s2.t); }
+          else if (it.k === "ch") { const c2 = act.chById.get(it.id); if (c2) names.push(c2.title); }
+        });
+        const row = el("button", { class:"spy-g", style:`--hue:${hue}`, onclick:() => {
+          Haptics.tap();
+          const card = v.querySelector("#grp-" + CSS.escape(g.id));
+          if (card) { if (!card.classList.contains("open")) card.querySelector(".part-head")?.click(); card.scrollIntoView({ behavior:"smooth", block:"start" }); }
+        }});
+        row.innerHTML = `<span class="spy-bar" aria-hidden="true"></span><span class="spy-main"><span class="spy-lab">${esc(g.label)}</span>` +
+          (names.length ? `<span class="spy-names">${esc(names.map(n => n.length > 30 ? n.slice(0, 29) + "…" : n).join(" · "))}</span>` : "") + `</span>`;
+        spy.appendChild(row);
+        rows.set("grp-" + g.id, row);
+      });
+      v.appendChild(spy);
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(en => {
+          const row = rows.get(en.target.id);
+          if (row) row.classList.toggle("near", en.isIntersecting);
+        });
+        const first = [...rows.entries()].find(([id, r]) => r.classList.contains("near"));
+        rows.forEach(r => r.classList.remove("on"));
+        if (first) { first[1].classList.add("on"); first[1].scrollIntoView({ block:"nearest" }); }
+      }, { rootMargin: "-72px 0px -55% 0px" });
+      v.querySelectorAll(".part-card").forEach(c => io.observe(c));
+    }
+
     // deep link: open + scroll to group
     const gTarget = q && q.get("g");
     if (gTarget) {
@@ -1403,6 +1484,7 @@ function renderSection(actId, sid){
     }
     reader.appendChild(arow);
     const scaffs = SCAFF[actId + ":" + sid];
+    let scaffEl = null;
     if (scaffs && scaffs.length) {
       const sc = el("div", { class:"scaff-card", id:"scaff-card" });
       const sh = el("button", { class:"scaff-head", "aria-expanded":"false", onclick:() => {
@@ -1412,7 +1494,7 @@ function renderSection(actId, sid){
       }});
       sh.innerHTML = `${ic("notebook-tabs")}<span class="sf-t">Recall scaffold</span><span class="sf-n">${scaffs.length > 1 ? scaffs.length + " entries" : (scaffs[0].n + " " + scaffs[0].cw)}</span><span class="part-chev">${I.chev}</span>`;
       sc.appendChild(sh);
-      const sbody = el("div", { class:"part-body" });
+      const sbody = el("div", { class:"sf-body" });
       const sin = el("div", { class:"scaff-body" });
       scaffs.forEach(e2 => {
         const ent = el("div", { class:"sf-ent" });
@@ -1426,7 +1508,8 @@ function renderSection(actId, sid){
       });
       sin.appendChild(el("p", { class:"scen-note" }, "From your DTS recall drill (System B) — number + name → must-prove → limbs."));
       sbody.appendChild(sin); sc.appendChild(sbody);
-      reader.appendChild(sc);
+      if (matchMedia("(min-width:1240px)").matches) { sc.classList.add("open"); sh.setAttribute("aria-expanded", "true"); }
+      scaffEl = sc;   // appended after the statute body (bottom on narrow, side rail on wide)
     }
     const pop = el("div", { class:"aa-pop", role:"group", "aria-label":"Reading display options" });
     const mkSeg = (opts, cur, onpick) => {
@@ -1480,6 +1563,7 @@ function renderSection(actId, sid){
     const body = el("div", { class:"statute" + (settings.font === "sans" ? " sans" : ""), style:`--fs-body:${settings.scale}` });
     body.innerHTML = s.h;
     reader.appendChild(body);
+    if (scaffEl) reader.appendChild(scaffEl);
 
     if (s.dh) {
       const dm = s.dh.match(/^(\d+[A-Z]{0,3})\./);
