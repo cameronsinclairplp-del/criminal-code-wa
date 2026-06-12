@@ -1,5 +1,5 @@
 /* WA Legislation — offline cache (auto-generated) */
-const VERSION = "wal-d89237c456";
+const VERSION = "wal-bfad1bee9f";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png",
   "./data/cc.json",
@@ -34,7 +34,25 @@ const ASSETS = ["./", "./index.html", "./manifest.webmanifest",
   "./data/docsda.json",
   "./data/docswp.json",
   "./data/docwsr.json",
-  "./data/docstyle.json"];
+  "./data/docstyle.json",
+  "./data/rcl.json",
+  "./data/rcav.json",
+  "./data/rco.json",
+  "./data/rcri.json",
+  "./data/rdc.json",
+  "./data/retc.json",
+  "./data/rem.json",
+  "./data/rhsm.json",
+  "./data/rid.json",
+  "./data/rint.json",
+  "./data/rii.json",
+  "./data/rop.json",
+  "./data/rro.json",
+  "./data/rsw.json",
+  "./data/rst.json",
+  "./data/rsd.json",
+  "./data/rti.json",
+  "./data/ryj.json"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(ASSETS)).then(() => self.skipWaiting()));
 });
