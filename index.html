@@ -697,9 +697,10 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
 
 
 /* ============ v8: wide-screen rails ============ */
-@media (min-width:1240px){
+@media (min-width:1360px){
   /* recall scaffold as sticky side rail beside the statute */
-  .reader{display:grid;grid-template-columns:minmax(0,1fr) 304px;column-gap:28px}
+  #view-section.active{max-width:1150px}
+  .reader{display:grid;grid-template-columns:minmax(0,1fr) 304px;column-gap:36px}
   .reader>*{grid-column:1}
   .reader>.scaff-card{grid-column:2;grid-row:1/span 99;align-self:start;position:sticky;top:74px;
     margin:0;max-height:calc(100vh - 100px);overflow:auto;scrollbar-width:thin}
@@ -707,14 +708,14 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
   .reader>.scaff-card .sf-body{grid-template-rows:1fr}
   .reader>.scaff-card .scaff-head{pointer-events:none}
   /* browse: scrollspy rail replaces the tickers */
-  #view-act{display:grid;grid-template-columns:minmax(0,1fr) 286px;column-gap:28px;align-items:start}
+  #view-act.active{display:grid;grid-template-columns:minmax(0,1fr) 304px;column-gap:36px;align-items:start;max-width:1150px}
   #view-act>*{grid-column:1}
   #view-act>.spy{grid-column:2;grid-row:1/span 199;align-self:start;position:sticky;top:74px;
     max-height:calc(100vh - 100px);overflow:auto;scrollbar-width:none;display:flex;flex-direction:column;gap:2px;
     padding:10px 4px 14px}
   #view-act .ticker{display:none}
 }
-@media (max-width:1239.9px){ .spy{display:none} }
+@media (max-width:1359.9px){ .spy{display:none} }
 
 /* scrollspy rail */
 .spy-head{font-size:.72em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);
@@ -733,6 +734,11 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
 .spy-g.on .spy-lab{color:var(--text);font-weight:700}
 @media(hover:hover){ .spy-g:hover{background:color-mix(in srgb,var(--hue,#888) 6%,transparent)} }
 [data-theme="dark"] .spy-g.on{background:color-mix(in srgb,var(--hue,#888) 16%,transparent)}
+
+@media (min-width:1360px){
+  #app{max-width:1560px}
+  #view-section.active, #view-act.active{padding-left:30px;padding-right:30px}
+}
 
 </style>
 </head>
@@ -1508,7 +1514,7 @@ function renderSection(actId, sid){
       });
       sin.appendChild(el("p", { class:"scen-note" }, "From your DTS recall drill (System B) — number + name → must-prove → limbs."));
       sbody.appendChild(sin); sc.appendChild(sbody);
-      if (matchMedia("(min-width:1240px)").matches) { sc.classList.add("open"); sh.setAttribute("aria-expanded", "true"); }
+      if (matchMedia("(min-width:1360px)").matches) { sc.classList.add("open"); sh.setAttribute("aria-expanded", "true"); }
       scaffEl = sc;   // appended after the statute body (bottom on narrow, side rail on wide)
     }
     const pop = el("div", { class:"aa-pop", role:"group", "aria-label":"Reading display options" });
