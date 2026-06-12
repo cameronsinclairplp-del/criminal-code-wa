@@ -1,5 +1,5 @@
 /* WA Legislation v3 — offline cache (auto-generated; atomic precache + progress channel) */
-const VERSION = "wal3-e1d462fd17";
+const VERSION = "wal3-935b210bdd";
 const ASSETS = [
 "./",
 "./index.html",

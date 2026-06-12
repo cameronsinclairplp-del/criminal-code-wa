@@ -623,6 +623,109 @@ body[data-view=reader] .swprog{top:64px;bottom:auto;left:auto;right:18px;transfo
  .toast{bottom:calc(80px + env(safe-area-inset-bottom,0px));z-index:60}
  body[data-view=reader] .toast{bottom:26px}
 }
+
+/* ---------- slice 7 — wide-home stat bento (≥900 only; narrow untouched) ---------- */
+/* pastel families — fills carry near-black ink; deep tones for accents (refs: brandkit pastels,
+   Invoca stat cards, pastel service-card grid). Dark theme: hue-into-#1C1C1E mixes, lifted inks. */
+.homewrap{
+ --rose:#F4D9E7;--rose-d:#8C2F5C;--sand:#F2E7CD;--sand-d:#77530F;
+ --lime:#E2F0CB;--lime-d:#42661A;--violet:#E7DDF6;--violet-d:#59399A;
+ --sky:#D5EBF7;--sky-d:#175E84;--indigo:#DFE3F9;--indigo-d:#3A47A4;--mint:#D7EFE0;--mint-d:#0F5F3E;
+}
+html[data-theme=dark] .homewrap{
+ --rose:#3A2230;--rose-d:#E8A8C8;--sand:#37301D;--sand-d:#E4C684;
+ --lime:#2C351D;--lime-d:#BBDC8B;--violet:#2F2741;--violet-d:#C9B5F2;
+ --sky:#1E2F3A;--sky-d:#93CCEC;--indigo:#252A41;--indigo-d:#ADB8F4;--mint:#1E3327;--mint-d:#8FD9B4;
+}
+.bento{display:none}
+@media (min-width:900px){
+ .homewrap{max-width:1360px}
+ .homewrap .hgrid{display:none}
+ .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px;align-items:start;margin-top:2px}
+ .mod{background:var(--card);border-radius:20px;box-shadow:var(--shadow-sm);overflow:hidden;display:flex;flex-direction:column}
+ .m-hero{grid-column:span 8;grid-row:span 2}
+ .m-cont{grid-column:span 4}
+ .m-study{grid-column:span 4}
+ .m-acts{grid-column:span 7}
+ .m-rec{grid-column:span 5}
+ /* module head (tinted strip on white modules) */
+ .mhead{display:flex;align-items:center;gap:8px;padding:12px 16px;font:650 13px inherit;letter-spacing:-.1px}
+ .mhead svg{flex:none}
+ .mhead .mlink{margin-left:auto;font:600 11.5px inherit}
+ .mhead.p-indigo{background:var(--indigo);color:var(--indigo-d)}
+ .mhead.p-sand{background:var(--sand);color:var(--sand-d)}
+ .mhead a.mlink{color:inherit}
+ .mhead a.mlink:hover{text-decoration:underline}
+ .mbody{padding:10px 16px 14px}
+ /* hero: domain groups + tinted chips */
+ .bdom{padding:9px 0 4px;border-top:1px solid var(--line)}
+ .bdom:first-child{border-top:none;padding-top:4px}
+ .bdh{font:650 11px inherit;letter-spacing:.05em;text-transform:uppercase;margin:0 0 7px}
+ .bchips{display:flex;flex-wrap:wrap;gap:7px;padding-bottom:6px}
+ .bchip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:6px 12px 6px 9px;font:550 12.5px inherit}
+ .bchip:hover{filter:brightness(.955)}
+ html[data-theme=dark] .bchip:hover{filter:brightness(1.18)}
+ .bchip:active{transform:scale(.97)}
+ .p-rose .bdh{color:var(--rose-d)} .p-rose .bchip{background:var(--rose);color:var(--rose-d)}
+ .p-sand .bdh{color:var(--sand-d)} .p-sand .bchip{background:var(--sand);color:var(--sand-d)}
+ .p-lime .bdh{color:var(--lime-d)} .p-lime .bchip{background:var(--lime);color:var(--lime-d)}
+ .p-violet .bdh{color:var(--violet-d)} .p-violet .bchip{background:var(--violet);color:var(--violet-d)}
+ .p-sky .bdh{color:var(--sky-d)} .p-sky .bchip{background:var(--sky);color:var(--sky-d)}
+ .p-indigo .bdh{color:var(--indigo-d)} .p-indigo .bchip{background:var(--indigo);color:var(--indigo-d)}
+ .p-mint .bdh{color:var(--mint-d)} .p-mint .bchip{background:var(--mint);color:var(--mint-d)}
+ /* filled modules (continue / study / recents) — pastel surface + dark ink + white strip */
+ .mod.filled{padding:16px 16px 0}
+ .mod.filled.p-sky{background:var(--sky)}
+ .mod.filled.p-violet{background:var(--violet)}
+ .mod.filled.p-mint{background:var(--mint)}
+ .mod.filled .kick{color:color-mix(in srgb,var(--ink) 72%,transparent)}
+ .mod.filled.p-sky .kick{color:var(--sky-d)}
+ .mod.filled.p-violet .kick{color:var(--violet-d)}
+ .mod.filled.p-mint .kick{color:var(--mint-d)}
+ .bct{font:650 19px/1.3 inherit;letter-spacing:-.3px;margin:10px 0 6px;color:var(--ink)}
+ .bct .num{color:var(--sky-d);font-feature-settings:"tnum"}
+ .bct.dim{color:color-mix(in srgb,var(--ink) 80%,transparent)}
+ .bprev{font:400 12.5px/1.6 inherit;color:color-mix(in srgb,var(--ink) 78%,transparent);margin:0 0 14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+ .bprev.dim{color:color-mix(in srgb,var(--ink) 76%,transparent)}
+ .bstrip{display:flex;align-items:center;gap:10px;background:var(--card);margin:auto -16px 0;padding:12px 16px;font:600 12.5px inherit;color:var(--accText)}
+ .bstrip:hover{background:var(--press)}
+ .bstrip.btns{gap:8px}
+ .bstrip.btns:hover{background:var(--card)}
+ .dbtn.bsm{display:inline-flex;width:auto;padding:8px 16px;font-size:12px}
+ .dbtn.bsm.q2{background:var(--canvas);color:var(--ink)}
+ html[data-theme=dark] .dbtn.bsm.q2{background:var(--press)}
+ .bmore{margin-left:auto;font:600 11.5px inherit;color:var(--accText)}
+ .bmore:hover,.bstrip:not(.btns):hover{text-decoration:underline}
+ /* study stats */
+ .bstats{display:grid;grid-template-columns:1fr 1fr;gap:4px 12px;margin:10px 0 14px}
+ .bstat b{font:650 22px/1.15 inherit;letter-spacing:-.5px;font-feature-settings:"tnum";color:var(--violet-d);display:block}
+ .bstat span{font:500 11px inherit;color:color-mix(in srgb,var(--ink) 70%,transparent)}
+ /* rows (acts / recents) */
+ .rows{display:flex;flex-direction:column}
+ .brow{display:grid;grid-template-columns:4px auto minmax(0,1fr) auto;align-items:center;column-gap:10px;padding:8.5px 6px;border-radius:10px;font:450 13px inherit}
+ .brow .rb{width:4px;height:15px;border-radius:2px}
+ .brow b{font:620 12.5px inherit;font-feature-settings:"tnum";white-space:nowrap}
+ .brow .bt2{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink)}
+ .brow .bn2{font:500 11px inherit;color:var(--mut);font-feature-settings:"tnum"}
+ .mod:not(.filled) .brow:hover{background:var(--press)}
+ .mod.filled .brow{margin:0 -6px}
+ .mod.filled .brow:hover{background:color-mix(in srgb,#FFFFFF 38%,transparent)}
+ html[data-theme=dark] .mod.filled .brow:hover{background:color-mix(in srgb,#FFFFFF 7%,transparent)}
+ .mod.filled .brow .bt2{color:var(--ink)}
+ .mod.filled.p-mint .brow b{color:var(--mint-d)}
+ .mod.filled.p-sky .brow b{color:var(--sky-d)}
+ .m-rec .rows{margin-bottom:2px}
+ .bempty{font:450 12.5px inherit;color:color-mix(in srgb,var(--ink) 76%,transparent);padding:6px 0 14px}
+ /* top bar search becomes a field-look control on wide */
+ .psearch{min-width:248px;justify-content:flex-start;background:var(--canvas);box-shadow:inset 0 0 0 1px var(--line);border-radius:12px;color:var(--mut)}
+ html[data-theme=dark] .psearch{background:var(--press)}
+ .psearch:hover:not(.on){background:var(--card);box-shadow:inset 0 0 0 1px var(--line),var(--shadow-sm)}
+ .psearch kbd{margin-left:auto}
+}
+@media (min-width:1120px){
+ .m-cont{grid-column:span 4}
+ .m-study{grid-column:span 4}
+}
 </style>
 </head>
 <body>
@@ -1064,6 +1167,15 @@ const ICON = (n, sz = 16) => `<svg width="${sz}" height="${sz}" viewBox="0 0 24 
 const HOME_ACTS = ["cc", "cia", "mda", "ea", "ba", "rta"];   /* accBg: slice-4 helper reused (one contrast mix, no token drift) */
 
 function renderHome(){
+  const wide = matchMedia("(min-width:900px)").matches;
+  $("#view-home .homewrap").innerHTML = wide ? homeBento() : homeNarrow();
+  const hs = $("#homesearch"); if (hs) hs.addEventListener("click", summonSearch);
+}
+/* breakpoint cross while on home → re-render the right composition */
+matchMedia("(min-width:900px)").addEventListener("change", () => { if (curView === "home") renderHome(); });
+
+/* narrow home — UNCHANGED v10 markup (the iPhone page; QA asserts identity) */
+function homeNarrow(){
   const last = rreadGet()[0];
   const a0 = last && byId[last.a];
   const contHtml = a0
@@ -1082,7 +1194,7 @@ function renderHome(){
       <span class="ab">${a.abbr}</span><span class="nm">${esc(a.short)}</span></a>`; }).join("");
   /* DOM order == spec order (search → continue → quick jump → study → acts) so narrow
      stacking and focus order match; wide places blocks into two columns via dense grid */
-  $("#view-home .homewrap").innerHTML = `
+  return `
     <h1 class="htitle">WA Legislation</h1>
     <p class="hsub">23 Acts · 10 doctrine manuals · 18 reference categories — all verbatim.</p>
     <div class="hgrid">
@@ -1103,7 +1215,72 @@ function renderHome(){
       <h2 class="hcap hg1">Acts <a href="#/library">Library →</a></h2>
       <div class="hacts hg1">${acts}</div>
     </div>`;
-  $("#homesearch").addEventListener("click", summonSearch);
+}
+
+/* wide home — stat bento (grilled 13/06/2026): hero topics · continue · study · acts · recents.
+   Colour per Cameron's refs: full pastel module fills + dark ink + domain-tinted chips + white strips. */
+const DOMC = ["rose", "sand", "lime", "violet", "sky", "indigo", "mint"];
+const fmtD = ts => { const d = new Date(ts); return `${String(d.getDate()).padStart(2,"0")}/${String(d.getMonth()+1).padStart(2,"0")}`; };
+function homeBento(){
+  const doms = BOOT.doms || [], topics = BOOT.topics || [];
+  const drillN = Object.values(SCAFF).reduce((n, arr) => n + arr.length, 0);
+  const hero = doms.map((dom, di) => {
+    const list = topics.filter(t => t.dom === di);
+    if (!list.length) return "";
+    return `<div class="bdom p-${DOMC[di] || "sky"}">
+      <h3 class="bdh">${esc(dom)}</h3>
+      <div class="bchips">${list.map(t => `<a class="bchip" href="#/topic/${t.id}">${ICON(t.icon, 14)}<span>${esc(t.name)}</span></a>`).join("")}</div>
+    </div>`;
+  }).join("");
+  const last = rreadGet()[0], a0 = last && byId[last.a];
+  const cont = a0
+    ? `<div class="kick"><span class="badge" style="background:${accBg(a0.color)}">${a0.abbr}</span><span>Continue reading</span></div>
+       <div class="bct">${last.n ? `<span class="num">s. ${esc(String(last.n))}</span> ` : ""}${esc(last.t || "")}</div>
+       ${last.p ? `<p class="bprev">${esc(last.p)}…</p>` : `<p class="bprev dim">${esc(a0.short)}</p>`}
+       <a class="bstrip" href="#/${last.a}/${last.s}">Open ${last.n ? "s. " + esc(String(last.n)) : "section"} →</a>`
+    : `<div class="kick"><span>Continue reading</span></div>
+       <div class="bct dim">Nothing on the go yet</div>
+       <p class="bprev dim">Open the Criminal Code or jump to a topic — your last section will sit here.</p>
+       <a class="bstrip" href="#/cc">Open the Criminal Code →</a>`;
+  const ql = lsGet("wal3-quizlast", null), dl = lsGet("wal3-drilllast", null);
+  const study = `
+    <div class="kick"><span>Study</span></div>
+    <div class="bstats">
+      <div class="bstat"><b>${drillN}</b><span>drill cards</span></div>
+      <div class="bstat"><b>${(BOOT.scenKeys || []).length}</b><span>examples</span></div>
+      <div class="bstat"><b>${ql ? `${ql.score}/${ql.total}` : "—"}</b><span>last quiz${ql ? " · " + esc(String(ql.scope).toUpperCase()) : ""}</span></div>
+      <div class="bstat"><b>${dl ? dl.seen : "—"}</b><span>last drill${dl ? " · " + fmtD(dl.ts) : ""}</span></div>
+    </div>
+    <div class="bstrip btns"><a class="dbtn bsm" href="#/study/drill">Start drill</a><a class="dbtn bsm q2" href="#/study/quiz">Start quiz</a><a class="bmore" href="#/study">All tools →</a></div>`;
+  const acts = HOME_ACTS.map(id => { const a = byId[id];
+    return `<a class="brow" href="#/${id}"><span class="rb" style="background:${a.color}"></span>
+      <b>${a.abbr}</b><span class="bt2">${esc(a.short)}</span><span class="bn2">${a.n ?? ""}</span></a>`; }).join("");
+  const rr = rreadGet().slice(0, 6);
+  const recents = rr.length
+    ? rr.map(x => { const a = byId[x.a]; if (!a) return "";
+        return `<a class="brow" href="#/${x.a}/${x.s}"><span class="rb" style="background:${a.color || "#6A7179"}"></span>
+          <b>${x.n ? "s. " + esc(String(x.n)) : a.abbr}</b><span class="bt2">${esc(x.t || a.short)}</span><span class="bn2">${a.abbr}</span></a>`; }).join("")
+    : `<div class="bempty">Sections you open collect here.</div>`;
+  return `
+    <h1 class="htitle">WA Legislation</h1>
+    <p class="hsub">23 Acts · 10 doctrine manuals · 18 reference categories — all verbatim.</p>
+    <div class="bento">
+      <section class="mod m-hero" aria-label="Quick Jump">
+        <div class="mhead p-indigo">${ICON("zap", 15)}<span>Quick Jump</span><a class="mlink" href="#/topics">All 50 →</a></div>
+        <div class="mbody">${hero}</div>
+      </section>
+      <section class="mod m-cont p-sky filled" aria-label="Continue reading">${cont}</section>
+      <section class="mod m-study p-violet filled" aria-label="Study">${study}</section>
+      <section class="mod m-acts" aria-label="Acts">
+        <div class="mhead p-sand">${ICON("library-big", 15)}<span>Acts</span><a class="mlink" href="#/library">All 23 →</a></div>
+        <div class="mbody rows">${acts}</div>
+      </section>
+      <section class="mod m-rec p-mint filled" aria-label="Recents">
+        <div class="kick"><span>Recents</span></div>
+        <div class="rows">${recents}</div>
+        <a class="bstrip" href="#/saved">Saved →</a>
+      </section>
+    </div>`;
 }
 
 /* quick jump — 50 curated topics, domain-grouped, 445 build-verified links */
@@ -1329,7 +1506,9 @@ function bmToggle(act, sec){
 }
 const rreadGet = () => lsGet("wal3-rread", []);
 function recRead(act, sec){
-  const r = [{ a: act.id, s: sec.id, n: sec.num ?? null, t: sec.t || "", ts: Date.now() },
+  const body = $("#body");
+  const p = body ? body.innerText.replace(/\s+/g, " ").trim().slice(0, 150) : "";
+  const r = [{ a: act.id, s: sec.id, n: sec.num ?? null, t: sec.t || "", p, ts: Date.now() },
     ...rreadGet().filter(x => !(x.a === act.id && x.s === sec.id))].slice(0, 30);
   localStorage.setItem("wal3-rread", JSON.stringify(r));
 }
@@ -2010,6 +2189,7 @@ function paintDrill(){
     return;
   }
   /* done */
+  try { localStorage.setItem("wal3-drilllast", JSON.stringify({ total: DR.total, seen: DR.seen, again: DR.again, scope: DR.scope, ts: Date.now() })); } catch(e){}
   w.innerHTML = `${backBtn("#/study", "Study")}
     <h1 class="vh">Recall drill — summary</h1>
     <div class="dcardbig done">
@@ -2121,6 +2301,7 @@ function paintQuiz(){
   const rows = QZ.qs.map((q, i) => { const A = byId[q.act], right = q.opts[q.picked] && q.opts[q.picked].ok;
     return `<a class="refrow qrev" href="#/${q.act}/${q.sec}">
       <b class="${right ? "good" : "miss"}">${ic(right)} ${A.abbr} s. ${esc(String(q.num))}<span class="vh">${right ? " correct" : " incorrect"}</span></b><span class="t">${esc(q.t)}</span></a>`; }).join("");
+  try { localStorage.setItem("wal3-quizlast", JSON.stringify({ score: QZ.score, total: QZ.qs.length, scope: QZ.scope, ts: Date.now() })); } catch(e){}
   w.innerHTML = `${backBtn("#/study", "Study")}
     <h1 class="vh">Section quiz — summary</h1>
     <div class="dcardbig done">
