@@ -717,23 +717,41 @@ table.dmx{border-collapse:collapse;width:100%;min-width:430px;font-size:.86em}
 }
 @media (max-width:1359.9px){ .spy{display:none} }
 
-/* scrollspy rail */
+/* scrollspy rail — part rows + topic colour pills */
 .spy-head{font-size:.72em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);
   margin:0 0 8px;padding:0 10px}
-.spy-g{display:flex;gap:10px;align-items:stretch;text-align:left;padding:7px 10px;border-radius:12px;
-  transition:background .15s;width:100%}
-.spy-g .spy-bar{flex:none;width:3px;border-radius:99px;background:color-mix(in srgb,var(--hue,#888) 30%,transparent);
-  transition:background .2s}
-.spy-g .spy-main{min-width:0;display:flex;flex-direction:column;gap:2px}
-.spy-g .spy-lab{font-size:.8em;font-weight:650;color:var(--text-2);line-height:1.3;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.spy-g .spy-names{font-size:.7em;line-height:1.45;color:var(--text-3);
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-.spy-g.on{background:color-mix(in srgb,var(--hue,#888) 8%,transparent)}
-.spy-g.on .spy-bar{background:color-mix(in srgb,var(--hue,#888) 75%,var(--text) 10%)}
+.spy-g{display:flex;flex-direction:column;gap:0;padding:4px 8px 7px;border-radius:13px;transition:background .18s,opacity .25s}
+.spy-g+.spy-g{margin-top:3px}
+.spy:has(.spy-g.on) .spy-g:not(.on){opacity:.78}
+@media(hover:hover){ .spy:has(.spy-g.on) .spy-g:not(.on):hover{opacity:1} }
+.spy-g .spy-go{display:flex;gap:10px;align-items:center;width:100%;text-align:left;padding:4px 2px;
+  border-radius:9px;cursor:pointer}
+.spy-g .spy-bar{flex:none;width:3px;height:17px;border-radius:99px;
+  background:color-mix(in srgb,var(--hue,#888) 32%,transparent);transition:background .2s,height .2s}
+.spy-g .spy-lab{font-size:.81em;font-weight:650;color:var(--text-2);line-height:1.3;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .18s}
+.spy-pills{display:flex;flex-wrap:wrap;gap:5px;padding:3px 0 1px 13px}
+.spy-pill{font-size:.69em;font-weight:650;line-height:1;padding:5px 9px;border-radius:999px;cursor:pointer;
+  color:color-mix(in srgb,var(--p7,#555) 78%,var(--text) 22%);
+  background:color-mix(in srgb,var(--p6,#888) 9%,var(--surface) 91%);
+  border:1px solid color-mix(in srgb,var(--p6,#888) 26%,transparent);
+  transition:background .15s,border-color .15s;white-space:nowrap}
+[data-theme="dark"] .spy-pill{color:color-mix(in srgb,var(--p3,#bbb) 80%,var(--text) 20%);
+  background:color-mix(in srgb,var(--p6,#888) 14%,var(--surface) 86%);
+  border-color:color-mix(in srgb,var(--p6,#888) 34%,transparent)}
+@media(hover:hover){
+  .spy-pill:hover{background:color-mix(in srgb,var(--p6,#888) 17%,var(--surface) 83%);
+    border-color:color-mix(in srgb,var(--p6,#888) 45%,transparent)}
+  .spy-g .spy-go:hover .spy-lab{color:var(--text)}
+}
+.spy-g.on{background:color-mix(in srgb,var(--hue,#888) 7%,transparent)}
+.spy-g.on .spy-bar{background:color-mix(in srgb,var(--hue,#888) 80%,var(--text) 10%);height:22px}
 .spy-g.on .spy-lab{color:var(--text);font-weight:700}
-@media(hover:hover){ .spy-g:hover{background:color-mix(in srgb,var(--hue,#888) 6%,transparent)} }
-[data-theme="dark"] .spy-g.on{background:color-mix(in srgb,var(--hue,#888) 16%,transparent)}
+[data-theme="dark"] .spy-g.on{background:color-mix(in srgb,var(--hue,#888) 15%,transparent)}
+.spy-go:focus-visible,.spy-pill:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+/* quick actions row (browse) */
+.qa-row{display:flex;gap:7px;flex-wrap:wrap;margin:-4px 0 14px}
 
 @media (min-width:1360px){
   #app{max-width:1560px}
@@ -1189,6 +1207,17 @@ function renderAct(actId, q){
       focusgo: qq => go(`/search?in=${m.id}` + (qq ? "&q=" + encodeURIComponent(qq) : "")),
     });
     v.appendChild(f);
+    const qrow = el("div", { class:"qa-row", role:"group", "aria-label":"Quick actions" });
+    const setAll = wantOpen => {
+      Haptics.tap();
+      v.querySelectorAll(".part-card").forEach(card => {
+        if (card.classList.contains("open") !== wantOpen) card.querySelector(".part-head")?.click();
+      });
+    };
+    qrow.appendChild(el("button", { class:"act-chip", onclick:() => setAll(true) }, "Expand all"));
+    qrow.appendChild(el("button", { class:"act-chip", onclick:() => setAll(false) }, "Collapse all"));
+    qrow.appendChild(el("button", { class:"act-chip", onclick:() => { Haptics.tap(); window.scrollTo({ top:0, behavior:"smooth" }); } }, "Top"));
+    v.appendChild(qrow);
 
     const openKey = "open:" + m.id;
     const open = new Set(store.get(openKey, [act.tree[0] && act.tree[0].id].filter(Boolean)));
@@ -1269,26 +1298,39 @@ function renderAct(actId, q){
     v.appendChild(el("p", { class:"sec-foot", style:"justify-content:center;margin-top:26px" },
       `${esc(m.name)}${m.pco ? " · " + esc(m.pco) : ""}`));
 
-    // ---- scrollspy rail (wide screens): what's where as you scroll ----
+    // ---- scrollspy rail (wide screens): part label + topic colour pills, tracks scroll ----
     if (act.tree.length > 1) {
       const spy = el("nav", { class:"spy", "aria-label":"Contents in view" });
       spy.appendChild(el("p", { class:"spy-head" }, "On this page"));
       const rows = new Map();
+      const pillName = n => { n = n.replace(/ & /g, " · "); return n.length > 18 ? n.split(" · ")[0] : n; };
       act.tree.forEach(g => {
         const hue = groupHue(act, g.id);
-        const names = [];
-        g.items.forEach(it => {
-          if (names.length >= 4) return;
-          if (it.k === "sec") { const s2 = act.byId.get(it.id); if (s2 && !s2.dt) names.push(s2.t); }
-          else if (it.k === "ch") { const c2 = act.chById.get(it.id); if (c2) names.push(c2.title); }
-        });
-        const row = el("button", { class:"spy-g", style:`--hue:${hue}`, onclick:() => {
+        const row = el("div", { class:"spy-g", style:`--hue:${hue}` });
+        const head = el("button", { class:"spy-go", onclick:() => {
           Haptics.tap();
           const card = v.querySelector("#grp-" + CSS.escape(g.id));
           if (card) { if (!card.classList.contains("open")) card.querySelector(".part-head")?.click(); card.scrollIntoView({ behavior:"smooth", block:"start" }); }
         }});
-        row.innerHTML = `<span class="spy-bar" aria-hidden="true"></span><span class="spy-main"><span class="spy-lab">${esc(g.label)}</span>` +
-          (names.length ? `<span class="spy-names">${esc(names.map(n => n.length > 30 ? n.slice(0, 29) + "…" : n).join(" · "))}</span>` : "") + `</span>`;
+        head.innerHTML = `<span class="spy-bar" aria-hidden="true"></span><span class="spy-lab">${esc(g.label)}</span>`;
+        row.appendChild(head);
+        const tset2 = new Map();
+        g.items.forEach(it => {
+          const add = sid => (act.inTopics.get(sid) || []).forEach(t2 => tset2.set(t2, (tset2.get(t2) || 0) + 1));
+          if (it.k === "sec") add(it.id);
+          else if (it.k === "ch") (act.secsOfCh.get(it.id) || []).forEach(s2 => add(s2.id));
+        });
+        if (tset2.size) {
+          const pw = el("div", { class:"spy-pills" });
+          [...tset2.entries()].filter(([t2]) => t2 !== "dictionaries" && t2 !== "keyterms").sort((a, b) => b[1] - a[1]).slice(0, 5).forEach(([tid2]) => {
+            const tp = topicById.get(tid2); if (!tp) return;
+            const fam = famOf(tp), r = BOOT.ramps[fam] || {};
+            const pill = el("button", { class:"spy-pill", style:`--p6:${r["600"]};--p7:${r["700"]};--p3:${r["300"]}`,
+              "aria-label":"Topic: " + tp.name, onclick:(e) => { e.stopPropagation(); Haptics.tap(); go("/t/" + tid2); } }, esc(pillName(tp.name)));
+            pw.appendChild(pill);
+          });
+          if (pw.children.length) row.appendChild(pw);
+        }
         spy.appendChild(row);
         rows.set("grp-" + g.id, row);
       });
@@ -1300,7 +1342,8 @@ function renderAct(actId, q){
         });
         const first = [...rows.entries()].find(([id, r]) => r.classList.contains("near"));
         rows.forEach(r => r.classList.remove("on"));
-        if (first) { first[1].classList.add("on"); first[1].scrollIntoView({ block:"nearest" }); }
+        rows.forEach(r => r.removeAttribute("aria-current"));
+        if (first) { first[1].classList.add("on"); first[1].setAttribute("aria-current", "location"); first[1].scrollIntoView({ block:"nearest" }); }
       }, { rootMargin: "-72px 0px -55% 0px" });
       v.querySelectorAll(".part-card").forEach(c => io.observe(c));
     }

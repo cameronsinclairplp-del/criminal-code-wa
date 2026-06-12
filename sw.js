@@ -1,5 +1,5 @@
 /* WA Legislation — offline cache (auto-generated) */
-const VERSION = "wal-025cffd0b7";
+const VERSION = "wal-78f41516ee";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest",
   "./icons/icon-180.png", "./icons/icon-192.png", "./icons/icon-512.png", "./icons/icon-maskable-512.png",
   "./data/cc.json",
