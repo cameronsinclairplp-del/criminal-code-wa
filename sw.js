@@ -1,5 +1,5 @@
 /* WA Legislation v3 — offline cache (auto-generated; atomic precache + progress channel) */
-const VERSION = "wal3-935b210bdd";
+const VERSION = "wal3-0f3f769057";
 const ASSETS = [
 "./",
 "./index.html",
@@ -15,6 +15,7 @@ const ASSETS = [
 "./data/cicpa.json",
 "./data/cpa.json",
 "./data/cpca.json",
+"./data/defs.json",
 "./data/docca.json",
 "./data/docint.json",
 "./data/docinv.json",
